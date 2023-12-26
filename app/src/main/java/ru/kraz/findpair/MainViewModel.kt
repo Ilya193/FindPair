@@ -1,5 +1,6 @@
 package ru.kraz.findpair
 
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -76,7 +77,7 @@ class MainViewModel : ViewModel() {
     fun setVisible(index: Int, itemUi: ItemUi) = viewModelScope.launch(Dispatchers.IO) {
         itemUi.visible(list, index)
         val visible = list.all {
-            it.visible
+            it.visible == View.VISIBLE
         }
         if (visible) {
             timer.cancel()
@@ -90,10 +91,10 @@ class MainViewModel : ViewModel() {
             _items.postValue(list.toList())
             Timer().schedule(object : TimerTask() {
                 override fun run() {
-                    val visibleItems = list.filter { it.visible }
+                    val visibleItems = list.filter { it.visible == View.VISIBLE }
                     val result = hasDuplicates(visibleItems, itemUi)
                     if (!result) {
-                        itemUi.visible(list, index, false)
+                        itemUi.visible(list, index, View.INVISIBLE)
                         _items.postValue(list.toList())
                     }
                 }

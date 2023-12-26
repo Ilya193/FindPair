@@ -18,14 +18,14 @@ class GameFragment : BaseFragment<FragmentGameBinding>() {
             oldItem.visible == newItem.visible
         }
 
-        areContentsSame = {oldItem, newItem ->
+        areContentsSame = { oldItem, newItem ->
             oldItem == newItem
         }
 
         bind {
             image.setImageResource(it.value)
-            image.visibility = if (it.visible) View.VISIBLE else View.INVISIBLE
-            root.isClickable = !it.visible
+            image.visibility = it.visible
+            root.isClickable = it.visible != View.VISIBLE
         }
 
         listeners {
@@ -55,6 +55,7 @@ class GameFragment : BaseFragment<FragmentGameBinding>() {
                         binding.time.text = it.time
                         binding.money.text = it.money
                     }
+
                     is GameUi.Finish -> {
                         parentFragmentManager.beginTransaction()
                             .replace(R.id.fragmentContainer, EndGameFragment.newInstance(it.money))
