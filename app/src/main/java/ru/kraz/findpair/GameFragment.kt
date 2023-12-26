@@ -15,7 +15,7 @@ class GameFragment : BaseFragment<FragmentGameBinding>() {
 
     private val adapter = simpleAdapter<ItemUi, ItemBinding> {
         areContentsSame = { oldItem, newItem ->
-            oldItem == newItem
+            oldItem.visible == newItem.visible
         }
 
         areContentsSame = {oldItem, newItem ->

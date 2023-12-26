@@ -75,7 +75,6 @@ class MainViewModel : ViewModel() {
 
     fun setVisible(index: Int, itemUi: ItemUi) = viewModelScope.launch(Dispatchers.IO) {
         itemUi.visible(list, index)
-        _items.postValue(list.toList())
         val visible = list.all {
             it.visible
         }
@@ -87,16 +86,19 @@ class MainViewModel : ViewModel() {
             moneyReceived = 100
             sec = 0
         }
-        Timer().schedule(object : TimerTask() {
-            override fun run() {
-                val visibleItems = list.filter { it.visible }
-                val result = hasDuplicates(visibleItems, itemUi)
-                if (!result) {
-                    itemUi.visible(list, index, false)
-                    _items.postValue(list.toList())
+        else {
+            _items.postValue(list.toList())
+            Timer().schedule(object : TimerTask() {
+                override fun run() {
+                    val visibleItems = list.filter { it.visible }
+                    val result = hasDuplicates(visibleItems, itemUi)
+                    if (!result) {
+                        itemUi.visible(list, index, false)
+                        _items.postValue(list.toList())
+                    }
                 }
-            }
-        }, 1500)
+            }, 1500)
+        }
     }
 
     private fun hasDuplicates(list: List<ItemUi>, item: ItemUi): Boolean {
