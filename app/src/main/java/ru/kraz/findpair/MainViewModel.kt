@@ -36,8 +36,14 @@ class MainViewModel : ViewModel() {
                 else {
                     val min = sec / 60
                     val newSec = sec % 60
-                    if (min < 10)
-                        _game.postValue(EventWrapper.Single(GameUi.Tick("0$min:$newSec", moneyReceived.toString())))
+                    if (min < 10) {
+                        if (newSec < 10) _game.postValue(EventWrapper.Single(GameUi.Tick("0$min:0$newSec", moneyReceived.toString())))
+                        else if (newSec in 10..59) _game.postValue(EventWrapper.Single(GameUi.Tick("0$min:$newSec", moneyReceived.toString())))
+                    }
+                    else {
+                        if (newSec < 10) _game.postValue(EventWrapper.Single(GameUi.Tick("$min:0$newSec", moneyReceived.toString())))
+                        else if (newSec in 10..59) _game.postValue(EventWrapper.Single(GameUi.Tick("$min:$newSec", moneyReceived.toString())))
+                    }
                 }
                 sec++
             }
@@ -76,14 +82,13 @@ class MainViewModel : ViewModel() {
 
     fun setVisible(index: Int, itemUi: ItemUi) = viewModelScope.launch(Dispatchers.IO) {
         itemUi.visible(list, index)
-        val visible = list.all {
+        val pairsFound = list.all {
             it.visible == View.VISIBLE
         }
-        if (visible) {
+        if (pairsFound) {
             timer.cancel()
             _game.postValue(EventWrapper.Single(GameUi.Finish(moneyReceived.toString())))
             _coins += moneyReceived
-            _liveDataCoins.postValue(_coins)
             moneyReceived = 100
             sec = 0
         }
