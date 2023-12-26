@@ -16,7 +16,7 @@ class MainViewModel : ViewModel() {
     val items: LiveData<List<ItemUi>> get() = _items
 
     private var timer = Timer()
-    private var sec = 0
+    private var sec = 600
     private var moneyReceived = 100
     private val _game = MutableLiveData<EventWrapper<GameUi>>()
     val game: LiveData<EventWrapper<GameUi>> get() = _game
@@ -30,21 +30,23 @@ class MainViewModel : ViewModel() {
         timer = Timer()
         timer.scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
+                var showTime = ""
                 if (sec > 20 && moneyReceived > 10) moneyReceived -= 5
-                if (sec < 10) _game.postValue(EventWrapper.Single(GameUi.Tick("00:0$sec", moneyReceived.toString())))
-                else if (sec in 10..59) _game.postValue(EventWrapper.Single(GameUi.Tick("00:$sec", moneyReceived.toString())))
+                if (sec < 10) showTime = "00:0$sec"
+                else if (sec in 10..59) showTime = "00:$sec"
                 else {
                     val min = sec / 60
                     val newSec = sec % 60
                     if (min < 10) {
-                        if (newSec < 10) _game.postValue(EventWrapper.Single(GameUi.Tick("0$min:0$newSec", moneyReceived.toString())))
-                        else if (newSec in 10..59) _game.postValue(EventWrapper.Single(GameUi.Tick("0$min:$newSec", moneyReceived.toString())))
+                        if (newSec < 10) showTime = "0$min:0$newSec"
+                        else if (newSec in 10..59) showTime = "0$min:$newSec"
                     }
                     else {
-                        if (newSec < 10) _game.postValue(EventWrapper.Single(GameUi.Tick("$min:0$newSec", moneyReceived.toString())))
-                        else if (newSec in 10..59) _game.postValue(EventWrapper.Single(GameUi.Tick("$min:$newSec", moneyReceived.toString())))
+                        if (newSec < 10) showTime = "$min:0$newSec"
+                        else if (newSec in 10..59) showTime = "$min:$newSec"
                     }
                 }
+                _game.postValue(EventWrapper.Single(GameUi.Tick(showTime, moneyReceived.toString())))
                 sec++
             }
         }, 0, 1000)
