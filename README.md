@@ -1,2 +1,1 @@
-https://github.com/Ilya193/FindPair/assets/40058340/b13bd9bb-1cfe-459f-b834-22b2d6105567
-
+https://github.com/Ilya193/FindPair/assets/40058340/a5e9c7a2-90e2-4dee-8189-79b9a6ce9b15
