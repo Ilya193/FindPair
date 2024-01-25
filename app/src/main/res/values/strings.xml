@@ -2,13 +2,13 @@
     <string name="app_name">FIndPair</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="play">PLAY</string>
+    <string name="play">Играть</string>
     <string name="background_3">Background #3</string>
     <string name="background_6">Background №6</string>
-    <string name="i_less_time_more_reward">I less time, more reward</string>
-    <string name="keep_matching_up_two_of_the_same_object_until_there_are_no_more_to_be_paired_and_you_clear_the_board">Keep matching up two of the same object until there are no more to be paired and you clear the board.</string>
+    <string name="i_less_time_more_reward">Меньше времени, больше награды</string>
+    <string name="keep_matching_up_two_of_the_same_object_until_there_are_no_more_to_be_paired_and_you_clear_the_board">Продолжайте совмещать два одинаковых объекта до тех пор, пока не останется пар, и вы не очистите доску</string>
     <string name="fast">fast</string>
-    <string name="congratulation">[CONGRATULATION!]</string>
-    <string name="great_you_won">[Great! You won!]</string>
-    <string name="double_reward">Double Reward</string>
+    <string name="congratulation">Поздравляем!</string>
+    <string name="great_you_won">Отлично! Ты выиграл!</string>
+    <string name="double_reward">Двойная награда</string>
 </resources>

@@ -1,5 +1,6 @@
 package ru.kraz.findpair
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -57,9 +58,14 @@ class GameFragment : BaseFragment<FragmentGameBinding>() {
                     }
 
                     is GameUi.Finish -> {
-                        parentFragmentManager.beginTransaction()
-                            .replace(R.id.fragmentContainer, EndGameFragment.newInstance(it.money))
-                            .commit()
+                        val sharedPreferences = context?.getSharedPreferences("data", Context.MODE_PRIVATE)
+                        var coins = sharedPreferences?.getInt("coins", -1) ?: -1
+                        if (coins != -1) {
+                            coins += it.money.toInt()
+                            sharedPreferences?.edit()?.putInt("coins", coins)?.apply()
+                        }
+                        else sharedPreferences?.edit()?.putInt("coins", it.money.toInt())?.apply()
+                        launchFragment(EndGameFragment.newInstance(it.money))
                     }
                 }
             }

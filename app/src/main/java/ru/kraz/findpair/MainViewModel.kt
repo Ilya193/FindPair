@@ -16,8 +16,8 @@ class MainViewModel : ViewModel() {
     val items: LiveData<List<ItemUi>> get() = _items
 
     private var timer = Timer()
-    private var sec = 600
-    private var moneyReceived = 100
+    private var sec = 0
+    private var coinWon = 100
     private val _game = MutableLiveData<EventWrapper<GameUi>>()
     val game: LiveData<EventWrapper<GameUi>> get() = _game
 
@@ -31,7 +31,7 @@ class MainViewModel : ViewModel() {
         timer.scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
                 var showTime = ""
-                if (sec > 20 && moneyReceived > 10) moneyReceived -= 5
+                if (sec > 20 && coinWon > 10) coinWon -= 5
                 if (sec < 10) showTime = "00:0$sec"
                 else if (sec in 10..59) showTime = "00:$sec"
                 else {
@@ -46,39 +46,44 @@ class MainViewModel : ViewModel() {
                         else if (newSec in 10..59) showTime = "$min:$newSec"
                     }
                 }
-                _game.postValue(EventWrapper.Single(GameUi.Tick(showTime, moneyReceived.toString())))
+                _game.postValue(EventWrapper.Single(GameUi.Tick(showTime, coinWon.toString())))
                 sec++
             }
         }, 0, 1000)
 
         list.addAll(
             listOf(
-                ItemUi.Fifth(),
-                ItemUi.Tenth(),
-                ItemUi.First(),
-                ItemUi.Second(),
-                ItemUi.Third(),
-                ItemUi.Fourth(),
-                ItemUi.Seventh(),
-                ItemUi.Fourth(),
-                ItemUi.Fifth(),
-                ItemUi.Sixth(),
-                ItemUi.Second(),
-                ItemUi.Sixth(),
-                ItemUi.Seventh(),
-                ItemUi.Eighth(),
-                ItemUi.First(),
-                ItemUi.Eighth(),
-                ItemUi.Ninth(),
-                ItemUi.Third(),
-                ItemUi.Ninth(),
-                ItemUi.Tenth(),
+                ItemUi.Fifth(pair = 8),
+                ItemUi.Tenth(pair = 19),
+                ItemUi.First(pair = 14),
+                ItemUi.Second(pair = 10),
+                ItemUi.Third(pair = 17),
+                ItemUi.Fourth(pair = 7),
+                ItemUi.Seventh(pair = 12),
+                ItemUi.Fourth(pair = 5),
+                ItemUi.Fifth(pair = 0),
+                ItemUi.Sixth(pair = 11),
+                ItemUi.Second(pair = 3),
+                ItemUi.Sixth(pair = 9),
+                ItemUi.Seventh(pair = 6),
+                ItemUi.Eighth(pair = 15),
+                ItemUi.First(pair = 2),
+                ItemUi.Eighth(pair = 13),
+                ItemUi.Ninth(pair = 18),
+                ItemUi.Third(pair = 4),
+                ItemUi.Ninth(pair = 16),
+                ItemUi.Tenth(pair = 1),
             )
         )
         _items.value = list.toList()
     }
 
     fun init() {
+        _liveDataCoins.value = _coins
+    }
+
+    fun init(coins: Int) {
+        this._coins = coins
         _liveDataCoins.value = _coins
     }
 
@@ -89,17 +94,18 @@ class MainViewModel : ViewModel() {
         }
         if (pairsFound) {
             timer.cancel()
-            _game.postValue(EventWrapper.Single(GameUi.Finish(moneyReceived.toString())))
-            _coins += moneyReceived
-            moneyReceived = 100
+            _game.postValue(EventWrapper.Single(GameUi.Finish(coinWon.toString())))
+            _coins += coinWon
+            coinWon = 100
             sec = 0
         }
         else {
             _items.postValue(list.toList())
             Timer().schedule(object : TimerTask() {
                 override fun run() {
-                    val visibleItems = list.filter { it.visible == View.VISIBLE }
-                    val result = hasDuplicates(visibleItems, itemUi)
+                    //val visibleItems = list.filter { it.visible == View.VISIBLE }
+                    //val result = hasDuplicates(visibleItems, itemUi)
+                    val result = list[index].checkStatePair(list)
                     if (!result) {
                         itemUi.visible(list, index, View.INVISIBLE)
                         _items.postValue(list.toList())
@@ -110,15 +116,18 @@ class MainViewModel : ViewModel() {
     }
 
     private fun hasDuplicates(list: List<ItemUi>, item: ItemUi): Boolean {
-        var result = 0
+        var result = false
         var count = 0
-        list.forEach {
+        for (it in list) {
             if (it.value == item.value) {
                 count++
-                if (count == 2) result++
+                if (count == 2) {
+                    result = true
+                    break
+                }
             }
         }
-        return result > 0
+        return result
     }
 }
 

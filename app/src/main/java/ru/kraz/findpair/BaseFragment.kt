@@ -11,6 +11,12 @@ abstract class BaseFragment<V : ViewBinding> : Fragment() {
     private var _binding: V? = null
     protected val binding get() = _binding!!
 
+    protected fun launchFragment(fragment: Fragment) {
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, fragment)
+            .commit()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

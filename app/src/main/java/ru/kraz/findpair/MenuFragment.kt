@@ -1,5 +1,6 @@
 package ru.kraz.findpair
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,14 +17,19 @@ class MenuFragment : BaseFragment<FragmentMenuBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.init()
+
+        val sharedPreferences = context?.getSharedPreferences("data", Context.MODE_PRIVATE)
+        val coins = sharedPreferences?.getInt("coins", -1) ?: -1
+
+        if (coins != -1)
+            viewModel.init(coins)
+        else viewModel.init()
+
         viewModel.coins.observe(viewLifecycleOwner) {
             binding.tvMoney.text = it.toString()
         }
         binding.btnPlay.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, GameFragment.newInstance())
-                .commit()
+            launchFragment(GameFragment.newInstance())
         }
     }
 
