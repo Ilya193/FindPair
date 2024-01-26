@@ -58,7 +58,7 @@ class MainViewModel : ViewModel() {
     fun initGame(time: Int, money: Int) {
         sec = time
         coinWon = money
-        initTimer()
+        initGame()
     }
 
     fun initGame() {
