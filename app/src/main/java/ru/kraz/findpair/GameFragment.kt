@@ -14,6 +14,9 @@ class GameFragment : BaseFragment<FragmentGameBinding>() {
 
     private val viewModel: MainViewModel by activityViewModels()
 
+    private var cacheTime = 0
+    private var cacheMoney = 100
+
     private val adapter = simpleAdapter<ItemUi, ItemBinding> {
         areContentsSame = { oldItem, newItem ->
             oldItem.visible == newItem.visible
@@ -39,11 +42,26 @@ class GameFragment : BaseFragment<FragmentGameBinding>() {
     override fun bind(inflater: LayoutInflater, container: ViewGroup?): FragmentGameBinding =
         FragmentGameBinding.inflate(inflater, container, false)
 
+    override fun onResume() {
+        super.onResume()
+        if (cacheTime != 0)
+            viewModel.initGame(cacheTime, cacheMoney)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.cancelTimer()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.items.adapter = adapter
 
-        viewModel.initGame()
+        if (savedInstanceState != null) {
+            cacheTime = savedInstanceState.getInt(CACHE_TIME, 0)
+            cacheMoney = savedInstanceState.getInt(CACHE_MONEY, 0)
+        }
+        else viewModel.initGame()
 
         viewModel.items.observe(viewLifecycleOwner) {
             adapter.submitList(it)
@@ -53,8 +71,10 @@ class GameFragment : BaseFragment<FragmentGameBinding>() {
             it.getContentOrNot {
                 when (it) {
                     is GameUi.Tick -> {
+                        cacheTime = it.sec
+                        cacheMoney = it.money
                         binding.time.text = it.time
-                        binding.money.text = it.money
+                        binding.money.text = cacheMoney.toString()
                     }
 
                     is GameUi.Finish -> {
@@ -72,7 +92,15 @@ class GameFragment : BaseFragment<FragmentGameBinding>() {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(CACHE_TIME, cacheTime)
+        outState.putInt(CACHE_MONEY, cacheMoney)
+    }
+
     companion object {
+        private const val CACHE_TIME = "CACHE_TIME"
+        private const val CACHE_MONEY = "CACHE_MONEY"
 
         fun newInstance() =
             GameFragment()

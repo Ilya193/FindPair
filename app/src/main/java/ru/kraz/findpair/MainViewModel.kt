@@ -25,8 +25,7 @@ class MainViewModel : ViewModel() {
     private val _liveDataCoins = MutableLiveData<Int>()
     val coins: LiveData<Int> get() = _liveDataCoins
 
-    fun initGame() {
-        list.clear()
+    private fun initTimer() {
         timer = Timer()
         timer.scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
@@ -46,10 +45,25 @@ class MainViewModel : ViewModel() {
                         else if (newSec in 10..59) showTime = "$min:$newSec"
                     }
                 }
-                _game.postValue(EventWrapper.Single(GameUi.Tick(showTime, coinWon.toString())))
+                _game.postValue(EventWrapper.Single(GameUi.Tick(sec, showTime, coinWon)))
                 sec++
             }
         }, 0, 1000)
+    }
+
+    fun cancelTimer() {
+        timer.cancel()
+    }
+
+    fun initGame(time: Int, money: Int) {
+        sec = time
+        coinWon = money
+        initTimer()
+    }
+
+    fun initGame() {
+        list.clear()
+        initTimer()
 
         list.addAll(
             listOf(
