@@ -3,6 +3,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="colorPrimary">#0066FF</color>
-    <color name="monitoring">#FF000000</color>
-    <color name="backgroundGameItem">#FFFAFA</color>
+    <color name="monitoring">#fff</color>
+    <color name="backgroundGameItem">#131313</color>
 </resources>

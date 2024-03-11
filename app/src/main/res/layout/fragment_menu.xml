@@ -42,7 +42,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:gravity="center"
-            android:src="@drawable/logo_pair"/>
+            android:src="@drawable/logo_pair" />
 
     </androidx.cardview.widget.CardView>
 
@@ -51,30 +51,23 @@
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
+        android:backgroundTint="@color/colorPrimary"
         android:text="@string/play"
         android:textAllCaps="true"
-        android:backgroundTint="#FF8F43F2"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/logo" />
 
-    <androidx.cardview.widget.CardView
+    <ImageView
         android:id="@+id/statisticsBtn"
-        android:layout_width="85dp"
-        android:layout_height="85dp"
-        android:backgroundTint="#FFE2E2E2"
-        app:cardCornerRadius="20dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
         android:layout_margin="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/monitoring"
-            android:layout_gravity="center"
-            android:contentDescription="@string/statistics" />
-
-    </androidx.cardview.widget.CardView>
+        android:contentDescription="@string/statistics"
+        android:src="@drawable/monitoring"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
