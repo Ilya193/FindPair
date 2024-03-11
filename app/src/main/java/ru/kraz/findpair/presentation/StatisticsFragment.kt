@@ -63,12 +63,8 @@ class StatisticsFragment : BaseFragment<FragmentStatisticsBinding>() {
             binding.tvInfo.visibility = if (it is GamesUiState.Empty) View.VISIBLE else View.GONE
             binding.rvGames.visibility = if (it is GamesUiState.Success) View.VISIBLE else View.GONE
             if (it is GamesUiState.Success) {
-                binding.tvTotalGames.text = HtmlCompat.fromHtml(
-                    String.format(
-                        resources.getString(R.string.total_games),
-                        it.data.size
-                    ), HtmlCompat.FROM_HTML_MODE_LEGACY
-                )
+                binding.tvTotalGames.text =
+                    textFromHtml(resources.getString(R.string.total_games), it.data.size.toString())
                 adapter.submitList(it.data)
             }
         }
