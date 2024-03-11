@@ -69,7 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="25sp"
-            tools:text="100"
+            android:text="@string/max_coins"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/circleMoney"
             app:layout_constraintBottom_toBottomOf="@id/circleMoney"/>
@@ -98,7 +98,7 @@
         android:paddingEnd="50dp"
         android:gravity="center"
         android:layout_marginTop="10dp"
-        android:text="@string/keep_matching_up_two_of_the_same_object_until_there_are_no_more_to_be_paired_and_you_clear_the_board"
+        android:text="@string/keep_matching_up_two_of_the_same_object_until_there_are_no_more_to_be_paired"
         app:layout_constraintTop_toBottomOf="@id/items"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

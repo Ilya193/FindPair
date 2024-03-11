@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import com.elveum.elementadapter.simpleAdapter
 import ru.kraz.findpair.databinding.FragmentGameBinding
@@ -13,6 +14,13 @@ import ru.kraz.findpair.databinding.ItemBinding
 class GameFragment : BaseFragment<FragmentGameBinding>() {
 
     private val viewModel: GameViewModel by viewModels()
+    private var cacheTime = 0
+
+    private val callback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            launchFragment(MenuFragment.newInstance())
+        }
+    }
 
     private val adapter = simpleAdapter<ItemUi, ItemBinding> {
         areContentsSame = { oldItem, newItem ->
@@ -39,41 +47,56 @@ class GameFragment : BaseFragment<FragmentGameBinding>() {
     override fun bind(inflater: LayoutInflater, container: ViewGroup?): FragmentGameBinding =
         FragmentGameBinding.inflate(inflater, container, false)
 
-
-    override fun onPause() {
-        super.onPause()
-        launchFragment(MenuFragment.newInstance())
-        viewModel.cancelTimer()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.items.adapter = adapter
 
-        viewModel.initGame()
+        if (savedInstanceState != null) launchFragment(MenuFragment.newInstance())
+        else {
+            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+            binding.items.adapter = adapter
 
-        viewModel.items.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
-        }
+            viewModel.initGame()
 
-        viewModel.gameState.observe(viewLifecycleOwner) {
-            it.getContentOrNot { state ->
-                when (state) {
-                    is GameUiState.Tick -> {
-                        binding.time.text = state.time
-                        binding.money.text = state.money.toString()
-                    }
+            viewModel.items.observe(viewLifecycleOwner) {
+                adapter.submitList(it)
+            }
 
-                    is GameUiState.Finish -> {
-                        val sharedPreferences = requireContext().getSharedPreferences("data", Context.MODE_PRIVATE)
-                        var coins = sharedPreferences.getInt("coins", 0)
-                        coins += state.money
-                        sharedPreferences.edit().putInt("coins", coins).apply()
-                        launchFragment(EndGameFragment.newInstance(state.money))
+            viewModel.gameState.observe(viewLifecycleOwner) {
+                it.getContentOrNot { state ->
+                    when (state) {
+                        is GameUiState.Tick -> {
+                            binding.time.text = state.time
+                            binding.money.text = state.money.toString()
+                            cacheTime = state.sec
+                        }
+
+                        is GameUiState.Finish -> {
+                            val sharedPreferences = requireContext().getSharedPreferences("data", Context.MODE_PRIVATE)
+                            var coins = sharedPreferences.getInt("coins", 0)
+                            coins += state.money
+                            sharedPreferences.edit().putInt("coins", coins).apply()
+                            launchFragment(EndGameFragment.newInstance(state.money))
+                        }
                     }
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (cacheTime != 0)
+            viewModel.initTimer(cacheTime)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.cancelTimer()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        callback.remove()
     }
 
     companion object {

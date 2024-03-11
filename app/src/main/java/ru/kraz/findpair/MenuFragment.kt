@@ -16,16 +16,15 @@ class MenuFragment : BaseFragment<FragmentMenuBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val sharedPreferences = context?.getSharedPreferences("data", Context.MODE_PRIVATE)
-        val coins = sharedPreferences?.getInt("coins", -1) ?: 0
+        val sharedPreferences = requireContext().getSharedPreferences("data", Context.MODE_PRIVATE)
+        val coins = sharedPreferences.getInt("coins", 0)
 
         binding.tvMoney.text = coins.toString()
 
         binding.btnPlay.setOnClickListener {
-            launchFragment(GameFragment.newInstance(), true)
+            launchFragment(GameFragment.newInstance())
         }
     }
-
 
     companion object {
 

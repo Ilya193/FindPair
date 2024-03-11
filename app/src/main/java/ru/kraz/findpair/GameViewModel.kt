@@ -51,6 +51,11 @@ class GameViewModel : ViewModel() {
         }, 0, 1000)
     }
 
+    fun initTimer(timer: Int) {
+        sec = timer
+        initTimer()
+    }
+
     fun cancelTimer() {
         timer.cancel()
     }
