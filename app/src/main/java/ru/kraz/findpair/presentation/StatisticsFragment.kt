@@ -1,6 +1,7 @@
 package ru.kraz.findpair.presentation
 
 import android.os.Bundle
+import android.text.Spanned
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,26 +29,21 @@ class StatisticsFragment : BaseFragment<FragmentStatisticsBinding>() {
         }
 
         bind {
-            tvDate.text = HtmlCompat.fromHtml(
-                String.format(
-                    resources.getString(R.string.date),
-                    it.date
-                ), HtmlCompat.FROM_HTML_MODE_LEGACY
-            )
-            tvTimespent.text = HtmlCompat.fromHtml(
-                String.format(
-                    resources.getString(R.string.timespent),
-                    it.timespent
-                ), HtmlCompat.FROM_HTML_MODE_LEGACY
-            )
-            tvProfit.text = HtmlCompat.fromHtml(
-                String.format(
-                    resources.getString(R.string.profit),
-                    it.profit
-                ), HtmlCompat.FROM_HTML_MODE_LEGACY
-            )
+            tvDate.text = textFromHtml(resources.getString(R.string.date), it.date)
+            tvTimespent.text =
+                textFromHtml(resources.getString(R.string.timespent), it.timespent.toString())
+            tvProfit.text = textFromHtml(resources.getString(R.string.profit), it.profit.toString())
         }
     }
+
+    private fun textFromHtml(text: String, value: String): Spanned =
+        HtmlCompat.fromHtml(
+            String.format(
+                text,
+                value
+            ), HtmlCompat.FROM_HTML_MODE_LEGACY
+        )
+
 
     override fun bind(inflater: LayoutInflater, container: ViewGroup?): FragmentStatisticsBinding =
         FragmentStatisticsBinding.inflate(inflater, container, false)
