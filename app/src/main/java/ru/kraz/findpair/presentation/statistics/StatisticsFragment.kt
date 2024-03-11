@@ -1,4 +1,4 @@
-package ru.kraz.findpair.presentation
+package ru.kraz.findpair.presentation.statistics
 
 import android.os.Bundle
 import android.text.Spanned

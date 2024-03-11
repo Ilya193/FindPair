@@ -1,4 +1,4 @@
-package ru.kraz.findpair.presentation
+package ru.kraz.findpair.presentation.game
 
 import android.view.View
 import androidx.lifecycle.LiveData

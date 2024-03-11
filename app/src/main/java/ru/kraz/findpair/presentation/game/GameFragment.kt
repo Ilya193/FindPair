@@ -1,4 +1,4 @@
-package ru.kraz.findpair.presentation
+package ru.kraz.findpair.presentation.game
 
 import android.content.Context
 import android.os.Bundle
@@ -10,7 +10,9 @@ import com.elveum.elementadapter.simpleAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.kraz.findpair.databinding.FragmentGameBinding
 import ru.kraz.findpair.databinding.ItemBinding
+import ru.kraz.findpair.presentation.end.EndGameFragment
 import ru.kraz.findpair.presentation.common.BaseFragment
+import ru.kraz.findpair.presentation.menu.MenuFragment
 
 class GameFragment : BaseFragment<FragmentGameBinding>() {
 

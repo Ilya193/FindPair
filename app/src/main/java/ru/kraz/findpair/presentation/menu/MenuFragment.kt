@@ -1,4 +1,4 @@
-package ru.kraz.findpair.presentation
+package ru.kraz.findpair.presentation.menu
 
 import android.content.Context
 import android.os.Bundle
@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import ru.kraz.findpair.R
 import ru.kraz.findpair.databinding.FragmentMenuBinding
+import ru.kraz.findpair.presentation.game.GameFragment
+import ru.kraz.findpair.presentation.statistics.StatisticsFragment
 import ru.kraz.findpair.presentation.common.BaseFragment
 
 class MenuFragment : BaseFragment<FragmentMenuBinding>() {

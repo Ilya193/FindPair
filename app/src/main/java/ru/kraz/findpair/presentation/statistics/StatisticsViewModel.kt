@@ -1,4 +1,4 @@
-package ru.kraz.findpair.presentation
+package ru.kraz.findpair.presentation.statistics
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.kraz.findpair.domain.Repository
+import ru.kraz.findpair.presentation.common.ToGameUiMapper
 
 class StatisticsViewModel(
     private val repository: Repository,

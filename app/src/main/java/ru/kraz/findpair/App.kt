@@ -11,9 +11,9 @@ import ru.kraz.findpair.data.GamesDb
 import ru.kraz.findpair.data.RepositoryImpl
 import ru.kraz.findpair.data.ToGameDbMapper
 import ru.kraz.findpair.domain.Repository
-import ru.kraz.findpair.presentation.GameViewModel
-import ru.kraz.findpair.presentation.StatisticsViewModel
-import ru.kraz.findpair.presentation.ToGameUiMapper
+import ru.kraz.findpair.presentation.game.GameViewModel
+import ru.kraz.findpair.presentation.statistics.StatisticsViewModel
+import ru.kraz.findpair.presentation.common.ToGameUiMapper
 
 class App : Application() {
 

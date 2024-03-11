@@ -1,4 +1,4 @@
-package ru.kraz.findpair.presentation
+package ru.kraz.findpair.presentation.statistics
 
 data class GameUi(
     val id: Int,
