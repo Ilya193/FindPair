@@ -5,4 +5,5 @@
     <color name="colorPrimary">#0066FF</color>
     <color name="monitoring">#fff</color>
     <color name="backgroundGameItem">#131313</color>
+    <color name="alarm">#FFF</color>
 </resources>
