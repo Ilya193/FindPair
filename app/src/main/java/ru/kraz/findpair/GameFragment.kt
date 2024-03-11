@@ -46,11 +46,6 @@ class GameFragment : BaseFragment<FragmentGameBinding>() {
         viewModel.cancelTimer()
     }
 
-    override fun onStop() {
-        super.onStop()
-        viewModel.cancelTimer()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.items.adapter = adapter
