@@ -63,6 +63,19 @@
             app:layout_constraintTop_toTopOf="@id/circleMoney"
             app:layout_constraintBottom_toBottomOf="@id/circleMoney"/>
 
+        <TextView
+            android:id="@+id/fakeMoney"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:text="-5"
+            android:visibility="gone"
+            android:textColor="@android:color/holo_red_dark"
+            app:layout_constraintStart_toStartOf="@id/money"
+            app:layout_constraintEnd_toEndOf="@id/money"
+            app:layout_constraintTop_toTopOf="@id/money"
+            app:layout_constraintBottom_toBottomOf="@id/money"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView

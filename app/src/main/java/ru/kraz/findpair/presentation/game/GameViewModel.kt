@@ -45,7 +45,10 @@ class GameViewModel(
         timer.scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
                 var showTime = ""
-                if (sec > 20 && coinsWon > 10) coinsWon -= 5
+                val pickUpMoney = if (sec > 20 && coinsWon > 10) {
+                    coinsWon -= 5
+                    true
+                } else false
                 if (sec < 10) showTime = "00:0$sec"
                 else if (sec in 10..59) showTime = "00:$sec"
                 else {
@@ -68,7 +71,8 @@ class GameViewModel(
                             GameUiState.Tick(
                                 sec,
                                 showTime,
-                                coinsWon
+                                coinsWon,
+                                pickUpMoney
                             )
                         )
                     )

@@ -71,6 +71,13 @@ class GameFragment : BaseFragment<FragmentGameBinding>() {
                             binding.time.text = state.time
                             binding.money.text = state.money.toString()
                             cacheTime = state.sec
+                            if (state.pickUpMoney) {
+                                binding.fakeMoney.visibility = View.VISIBLE
+                                binding.fakeMoney.animate().translationY(-80f).setDuration(150).withEndAction {
+                                    binding.fakeMoney.visibility = View.GONE
+                                    binding.fakeMoney.translationY = 0f
+                                }.start()
+                            }
                         }
 
                         is GameUiState.Finish -> {
