@@ -8,19 +8,20 @@ import ru.kraz.findpair.databinding.FragmentEndGameBinding
 
 
 class EndGameFragment : BaseFragment<FragmentEndGameBinding>() {
-    private lateinit var coinsWon: String
+
+    private var coinsWon = 0
 
     override fun bind(inflater: LayoutInflater, container: ViewGroup?): FragmentEndGameBinding =
         FragmentEndGameBinding.inflate(inflater, container, false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        coinsWon = arguments?.getString(COINS_WON, "") ?: ""
+        coinsWon = requireArguments().getInt(COINS_WON, 0)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.money.text = coinsWon
+        binding.money.text = coinsWon.toString()
         binding.home.setOnClickListener {
             launchFragment(MenuFragment.newInstance())
         }
@@ -29,10 +30,10 @@ class EndGameFragment : BaseFragment<FragmentEndGameBinding>() {
     companion object {
         private const val COINS_WON = "COINS_WON"
 
-        fun newInstance(coinsWon: String) =
+        fun newInstance(coinsWon: Int) =
             EndGameFragment().apply {
                 arguments = Bundle().apply {
-                    putString(COINS_WON, coinsWon)
+                    putInt(COINS_WON, coinsWon)
                 }
             }
     }

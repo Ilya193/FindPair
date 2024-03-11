@@ -5,16 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.replace
 import androidx.viewbinding.ViewBinding
 
 abstract class BaseFragment<V : ViewBinding> : Fragment() {
     private var _binding: V? = null
     protected val binding get() = _binding!!
 
-    protected fun launchFragment(fragment: Fragment) {
-        parentFragmentManager.beginTransaction()
+    protected fun launchFragment(fragment: Fragment, addToBackStack: Boolean = false) {
+        val transaction = parentFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, fragment)
-            .commit()
+        if (addToBackStack) transaction.addToBackStack(null)
+        transaction.commit()
     }
 
     override fun onCreateView(

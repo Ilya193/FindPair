@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import java.util.Timer
 import java.util.TimerTask
 
-class MainViewModel : ViewModel() {
+class GameViewModel : ViewModel() {
     private val list = mutableListOf<ItemUi>()
     private val _items = MutableLiveData<List<ItemUi>>()
     val items: LiveData<List<ItemUi>> get() = _items
@@ -18,12 +18,8 @@ class MainViewModel : ViewModel() {
     private var timer = Timer()
     private var sec = 0
     private var coinWon = 100
-    private val _game = MutableLiveData<EventWrapper<GameUi>>()
-    val game: LiveData<EventWrapper<GameUi>> get() = _game
-
-    private var _coins = 0
-    private val _liveDataCoins = MutableLiveData<Int>()
-    val coins: LiveData<Int> get() = _liveDataCoins
+    private val _gameState = MutableLiveData<EventWrapper<GameUiState>>()
+    val gameState: LiveData<EventWrapper<GameUiState>> get() = _gameState
 
     private fun initTimer() {
         timer = Timer()
@@ -39,14 +35,18 @@ class MainViewModel : ViewModel() {
                     if (min < 10) {
                         if (newSec < 10) showTime = "0$min:0$newSec"
                         else if (newSec in 10..59) showTime = "0$min:$newSec"
-                    }
-                    else {
+                    } else {
                         if (newSec < 10) showTime = "$min:0$newSec"
                         else if (newSec in 10..59) showTime = "$min:$newSec"
                     }
                 }
-                _game.postValue(EventWrapper.Single(GameUi.Tick(sec, showTime, coinWon)))
-                sec++
+                if (sec == 3600) {
+                    _gameState.postValue(EventWrapper.Single(GameUiState.Finish(1)))
+                    timer.cancel()
+                } else {
+                    _gameState.postValue(EventWrapper.Single(GameUiState.Tick(sec, showTime, coinWon)))
+                    sec++
+                }
             }
         }, 0, 1000)
     }
@@ -55,16 +55,8 @@ class MainViewModel : ViewModel() {
         timer.cancel()
     }
 
-    fun initGame(time: Int, money: Int) {
-        sec = time
-        coinWon = money
-        initGame()
-    }
-
     fun initGame() {
-        list.clear()
         initTimer()
-
         list.addAll(
             listOf(
                 ItemUi.Fifth(pair = 8),
@@ -92,26 +84,11 @@ class MainViewModel : ViewModel() {
         _items.value = list.toList()
     }
 
-    fun init() {
-        _liveDataCoins.value = _coins
-    }
-
-    fun init(coins: Int) {
-        this._coins = coins
-        _liveDataCoins.value = _coins
-    }
-
     fun setVisible(index: Int, itemUi: ItemUi) = viewModelScope.launch(Dispatchers.IO) {
         itemUi.visible(list, index)
-        val pairsFound = list.all {
-            it.visible == View.VISIBLE
-        }
-        if (pairsFound) {
+        if (list.all { it.visible == View.VISIBLE}) {
             timer.cancel()
-            _game.postValue(EventWrapper.Single(GameUi.Finish(coinWon.toString())))
-            _coins += coinWon
-            coinWon = 100
-            sec = 0
+            _gameState.postValue(EventWrapper.Single(GameUiState.Finish(coinWon)))
         }
         else {
             _items.postValue(list.toList())

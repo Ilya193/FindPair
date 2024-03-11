@@ -70,7 +70,7 @@
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/lock"
+            android:src="@drawable/monitoring"
             android:layout_gravity="center"/>
 
     </androidx.cardview.widget.CardView>

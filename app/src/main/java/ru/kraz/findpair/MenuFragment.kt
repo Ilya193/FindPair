@@ -10,8 +10,6 @@ import ru.kraz.findpair.databinding.FragmentMenuBinding
 
 class MenuFragment : BaseFragment<FragmentMenuBinding>() {
 
-    private val viewModel: MainViewModel by activityViewModels()
-
     override fun bind(inflater: LayoutInflater, container: ViewGroup?): FragmentMenuBinding =
         FragmentMenuBinding.inflate(inflater, container, false)
 
@@ -19,23 +17,18 @@ class MenuFragment : BaseFragment<FragmentMenuBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         val sharedPreferences = context?.getSharedPreferences("data", Context.MODE_PRIVATE)
-        val coins = sharedPreferences?.getInt("coins", -1) ?: -1
+        val coins = sharedPreferences?.getInt("coins", -1) ?: 0
 
-        if (coins != -1)
-            viewModel.init(coins)
-        else viewModel.init()
+        binding.tvMoney.text = coins.toString()
 
-        viewModel.coins.observe(viewLifecycleOwner) {
-            binding.tvMoney.text = it.toString()
-        }
         binding.btnPlay.setOnClickListener {
-            launchFragment(GameFragment.newInstance())
+            launchFragment(GameFragment.newInstance(), true)
         }
     }
 
 
     companion object {
-        fun newInstance() =
-            MenuFragment()
+
+        fun newInstance() = MenuFragment()
     }
 }
