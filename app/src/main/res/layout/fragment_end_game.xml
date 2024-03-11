@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EndGameFragment">
+    tools:context=".presentation.EndGameFragment">
 
     <LinearLayout
         android:id="@+id/container"
@@ -93,7 +93,8 @@
                     android:layout_height="60dp"
                     android:layout_gravity="end|center_vertical"
                     android:background="#FFE2E2E2"
-                    android:src="@drawable/home" />
+                    android:src="@drawable/home"
+                    android:contentDescription="@string/menu" />
 
             </androidx.cardview.widget.CardView>
 

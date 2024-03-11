@@ -12,4 +12,11 @@
     <string name="great_you_won">Отлично! Ты выиграл!</string>
     <string name="double_reward">Двойная награда</string>
     <string name="max_coins">100</string>
+    <string name="statistics">Статистика</string>
+    <string name="menu">Меню</string>
+    <string name="no_saved_games">Нет сохраненных игр</string>
+    <string name="date">&lt;b>Время игры:&lt;/b> %s</string>
+    <string name="timespent">&lt;b>Время затрачено:&lt;/b> %s сек</string>
+    <string name="profit">&lt;b>Выигрыш:&lt;/b> %s монет</string>
+    <string name="total_games">&lt;b>Всего игр:&lt;/b> %s</string>
 </resources>

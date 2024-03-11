@@ -1,4 +1,4 @@
-package ru.kraz.findpair
+package ru.kraz.findpair.presentation
 
 import android.view.View
 import androidx.lifecycle.LiveData
@@ -7,26 +7,45 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ru.kraz.findpair.domain.GameDomain
+import ru.kraz.findpair.domain.Repository
+import ru.kraz.findpair.presentation.common.EventWrapper
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import java.util.Timer
 import java.util.TimerTask
 
-class GameViewModel : ViewModel() {
+
+class GameViewModel(
+    private val repository: Repository,
+) : ViewModel() {
     private val list = mutableListOf<ItemUi>()
     private val _items = MutableLiveData<List<ItemUi>>()
+
+    private val sdf = SimpleDateFormat("dd.MM.yyyy, HH:mm", Locale.getDefault())
     val items: LiveData<List<ItemUi>> get() = _items
 
     private var timer = Timer()
     private var sec = 0
-    private var coinWon = 100
+    private var coinsWon = 100
     private val _gameState = MutableLiveData<EventWrapper<GameUiState>>()
     val gameState: LiveData<EventWrapper<GameUiState>> get() = _gameState
+
+    private fun saveData(coins: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val date = sdf.format(Date())
+            repository.saveData(GameDomain(date = date, timespent = sec, profit = coinsWon))
+            _gameState.postValue(EventWrapper.Single(GameUiState.Finish(coins)))
+        }
+    }
 
     private fun initTimer() {
         timer = Timer()
         timer.scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
                 var showTime = ""
-                if (sec > 20 && coinWon > 10) coinWon -= 5
+                if (sec > 20 && coinsWon > 10) coinsWon -= 5
                 if (sec < 10) showTime = "00:0$sec"
                 else if (sec in 10..59) showTime = "00:$sec"
                 else {
@@ -41,10 +60,18 @@ class GameViewModel : ViewModel() {
                     }
                 }
                 if (sec == 3600) {
-                    _gameState.postValue(EventWrapper.Single(GameUiState.Finish(1)))
+                    saveData(1)
                     timer.cancel()
                 } else {
-                    _gameState.postValue(EventWrapper.Single(GameUiState.Tick(sec, showTime, coinWon)))
+                    _gameState.postValue(
+                        EventWrapper.Single(
+                            GameUiState.Tick(
+                                sec,
+                                showTime,
+                                coinsWon
+                            )
+                        )
+                    )
                     sec++
                 }
             }
@@ -92,8 +119,8 @@ class GameViewModel : ViewModel() {
     fun setVisible(index: Int, itemUi: ItemUi) = viewModelScope.launch(Dispatchers.IO) {
         itemUi.visible(list, index)
         if (list.all { it.visible == View.VISIBLE}) {
+            saveData(coinsWon)
             timer.cancel()
-            _gameState.postValue(EventWrapper.Single(GameUiState.Finish(coinWon)))
         }
         else {
             _items.postValue(list.toList())

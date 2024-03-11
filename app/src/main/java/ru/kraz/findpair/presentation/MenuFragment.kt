@@ -1,12 +1,13 @@
-package ru.kraz.findpair
+package ru.kraz.findpair.presentation
 
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
+import ru.kraz.findpair.R
 import ru.kraz.findpair.databinding.FragmentMenuBinding
+import ru.kraz.findpair.presentation.common.BaseFragment
 
 class MenuFragment : BaseFragment<FragmentMenuBinding>() {
 
@@ -23,6 +24,19 @@ class MenuFragment : BaseFragment<FragmentMenuBinding>() {
 
         binding.btnPlay.setOnClickListener {
             launchFragment(GameFragment.newInstance())
+        }
+
+        binding.statisticsBtn.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .setCustomAnimations(
+                    R.anim.slide_in,
+                    R.anim.fade_out,
+                    R.anim.fade_in,
+                    R.anim.slide_out
+                )
+                .replace(R.id.fragmentContainer, StatisticsFragment.newInstance())
+                .addToBackStack(null)
+                .commit()
         }
     }
 

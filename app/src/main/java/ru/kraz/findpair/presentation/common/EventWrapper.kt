@@ -1,4 +1,4 @@
-package ru.kraz.findpair
+package ru.kraz.findpair.presentation.common
 
 interface EventWrapper<T> {
     fun getContentOrNot(callback: (T) -> Unit)

@@ -1,6 +1,7 @@
-package ru.kraz.findpair
+package ru.kraz.findpair.presentation
 
 import android.view.View
+import ru.kraz.findpair.R
 
 sealed class ItemUi(
     open val value: Int,

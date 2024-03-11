@@ -1,10 +1,11 @@
-package ru.kraz.findpair
+package ru.kraz.findpair.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import ru.kraz.findpair.databinding.FragmentEndGameBinding
+import ru.kraz.findpair.presentation.common.BaseFragment
 
 
 class EndGameFragment : BaseFragment<FragmentEndGameBinding>() {

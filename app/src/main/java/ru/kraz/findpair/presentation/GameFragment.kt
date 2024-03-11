@@ -1,4 +1,4 @@
-package ru.kraz.findpair
+package ru.kraz.findpair.presentation
 
 import android.content.Context
 import android.os.Bundle
@@ -6,14 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.fragment.app.viewModels
 import com.elveum.elementadapter.simpleAdapter
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.kraz.findpair.databinding.FragmentGameBinding
 import ru.kraz.findpair.databinding.ItemBinding
+import ru.kraz.findpair.presentation.common.BaseFragment
 
 class GameFragment : BaseFragment<FragmentGameBinding>() {
 
-    private val viewModel: GameViewModel by viewModels()
+    private val viewModel: GameViewModel by viewModel()
     private var cacheTime = 0
 
     private val callback = object : OnBackPressedCallback(true) {
@@ -71,7 +72,8 @@ class GameFragment : BaseFragment<FragmentGameBinding>() {
                         }
 
                         is GameUiState.Finish -> {
-                            val sharedPreferences = requireContext().getSharedPreferences("data", Context.MODE_PRIVATE)
+                            val sharedPreferences =
+                                requireContext().getSharedPreferences("data", Context.MODE_PRIVATE)
                             var coins = sharedPreferences.getInt("coins", 0)
                             coins += state.money
                             sharedPreferences.edit().putInt("coins", coins).apply()

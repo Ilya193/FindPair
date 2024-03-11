@@ -1,4 +1,4 @@
-package ru.kraz.findpair
+package ru.kraz.findpair.presentation.common
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
